@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/jumaniyozov/gonster/interaction"
 )
 
@@ -13,7 +14,6 @@ func main() {
 
 	for winner == "" {
 		winner = executeRound()
-		winner = "Ww"
 	}
 
 	endGame()
@@ -25,10 +25,11 @@ func startGame() {
 
 func executeRound() string {
 	currentRound++
-	isSpecialRound := (currentRound % 3) == 0
+	isSpecialRound := currentRound % 3 == 0
 
 	interaction.ShowAvailableActions(isSpecialRound)
-
+	userChoice := interaction.GetPlayerChoice(isSpecialRound)
+	fmt.Println(userChoice)
 	return ""
 }
 
