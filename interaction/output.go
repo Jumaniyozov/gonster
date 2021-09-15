@@ -1,14 +1,17 @@
 package interaction
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
 
 type RoundData struct {
-	Action string
-	PlayerAttackDmg int
-	PlayerHealValue int
+	Action           string
+	PlayerAttackDmg  int
+	PlayerHealValue  int
 	MonsterAttackDmg int
-	PlayerHealth int
-	MonsterHealth int
+	PlayerHealth     int
+	MonsterHealth    int
 }
 
 func PrintGreeting() {
@@ -46,4 +49,35 @@ func DeclareWinner(winner string) {
 	fmt.Println("GAME OVER!")
 	fmt.Println("-------------------------")
 	fmt.Printf("%v won!\n", winner)
+}
+
+func WriteLogFile(rounds *[]RoundData) {
+	file, err := os.Create("gamelog.txt")
+
+	if err != nil {
+		fmt.Println("There is an error occured while creating log file.")
+		return
+	}
+
+	for index, value := range *rounds {
+		logEntry := map[string]string{
+			"Round":                 fmt.Sprint(index + 1),
+			"Action":                value.Action,
+			"Player Attack Damage":  fmt.Sprint(value.PlayerAttackDmg),
+			"Player Heal Value":     fmt.Sprint(value.PlayerHealValue),
+			"Monster Attack Damage": fmt.Sprint(value.MonsterAttackDmg),
+			"Player Health":         fmt.Sprint(value.PlayerHealth),
+			"Monster Health":        fmt.Sprint(value.MonsterHealth),
+		}
+		logLine := fmt.Sprintln(logEntry)
+		_, err := file.WriteString(logLine)
+
+		if err != nil {
+			fmt.Println("Writing log failed.")
+			continue
+		}
+	}
+
+	file.Close()
+	fmt.Println("Data has been written successfully!")
 }
