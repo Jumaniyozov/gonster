@@ -10,7 +10,7 @@ var randGenerator = rand.New(randSource)
 var currentMonsterHealth = MONSTER_HEALTH
 var currentPlayerHealth = PLAYER_HEALTH
 
-func AttackMonster(isSpecialAttack bool) {
+func AttackMonster(isSpecialAttack bool) int {
 	minAttackValue := PLAYER_ATTACK_MIN
 	maxAttackValue := PLAYER_ATTACK_MAX
 
@@ -21,9 +21,10 @@ func AttackMonster(isSpecialAttack bool) {
 
 	dmgValue := generateRandBetween(minAttackValue, maxAttackValue)
 	currentMonsterHealth -= dmgValue
+	return dmgValue
 }
 
-func HealPlayer() {
+func HealPlayer() int {
 
 	healValue := generateRandBetween(PLAYER_HEAL_MIN, PLAYER_HEAL_MAX)
 
@@ -31,18 +32,25 @@ func HealPlayer() {
 
 	if healthDiff >= healValue {
 		currentPlayerHealth += healValue
+		return healValue
 	} else {
 		currentPlayerHealth = PLAYER_HEALTH
+		return healthDiff
 	}
 
-	currentPlayerHealth += healValue
 }
 
-func AttackPlayer() {
+func AttackPlayer() int {
 	dmgValue := generateRandBetween(MONSTER_ATTACK_MIN, MONSTER_ATTACK_MAX)
 	currentPlayerHealth -= dmgValue
+
+	return dmgValue
 }
 
 func generateRandBetween(min int, max int) int {
 	return randGenerator.Intn(max - min) + min
+}
+
+func GetHealthAmounts() (int, int) {
+	return currentPlayerHealth, currentMonsterHealth
 }
